@@ -2,7 +2,6 @@ package vnd.blueararat.kaleidoscope6
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -22,8 +21,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -31,12 +28,15 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 
-class Kaleidoscope : Activity() {
+class Kaleidoscope : AppCompatActivity() {
     var preferences: SharedPreferences? = null
     private var mNumberOfMirrors = 0
     private var mBitmap // sNewBitmap, sViewBitmap, mBitmap, sExportBitmap;
@@ -72,14 +72,14 @@ class Kaleidoscope : Activity() {
         toggleHardwareAcceleration(preferences!!.getBoolean(KEY_HARDWARE_ACCEL, true))
         // setContentView(mK);
 
-//        mK!!.viewTreeObserver.addOnDrawListener {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                mK!!.drawPoints(display?.width?: 1080, display?.height?: 1920)
-//            }else{
-//                mK!!.drawPoints(getScreenSize().x, getScreenSize().y)
-//
-//            }
-//        }
+        mK!!.viewTreeObserver.addOnDrawListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                mK!!.drawPoints(display?.width?: 1080, display?.height?: 1920)
+            }else{
+                mK!!.drawPoints(getScreenSize().x, getScreenSize().y)
+
+            }
+        }
 
     }
 
@@ -344,6 +344,7 @@ class Kaleidoscope : Activity() {
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             CAN_USE_CAMERA_PERMISSION_RESULT -> {
 
@@ -418,11 +419,11 @@ class Kaleidoscope : Activity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_PICTURE) {
             if (resultCode == RESULT_OK) {
-                imageUri = data.data
+                imageUri = data?.data
                 val options = BitmapFactory.Options()
                 options.inScaled = false
                 loadBitmap(options, imageUri)

@@ -581,10 +581,17 @@ class KView @JvmOverloads constructor(
         paint(canvas, mViewBitmap)
     }
 
+    var count =0 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val action = event.actionMasked
         val P = event.pointerCount
         // int N = event.getHistorySize();
+        count ++
+
+        if (action == MotionEvent.ACTION_UP){
+            count = 0
+        }
+        Log.d(TAG, "onTouchEvent: Count $count")
         if (action != MotionEvent.ACTION_MOVE) {
 
             if (action == MotionEvent.ACTION_DOWN) {
@@ -685,36 +692,34 @@ class KView @JvmOverloads constructor(
         val pointH = listPointOct[7]
 
         val newListAB = mutableListOf<Point>()
-//        val newListBC = mutableListOf<Point>()
-//        val newListCD = mutableListOf<Point>()
-//        val newListDE = mutableListOf<Point>()
-//        val newListEF = mutableListOf<Point>()
-//        val newListFG = mutableListOf<Point>()
-//        val newListGH = mutableListOf<Point>()
-//        val newListHA = mutableListOf<Point>()
+        val newListBC = mutableListOf<Point>()
+        val newListCD = mutableListOf<Point>()
+        val newListDE = mutableListOf<Point>()
+        val newListEF = mutableListOf<Point>()
+        val newListFG = mutableListOf<Point>()
+        val newListGH = mutableListOf<Point>()
+        val newListHA = mutableListOf<Point>()
 
 
-        newListAB.addAll(generatePointsBetweenTwoPointsAtoB(pointA, pointB, 50))
-//        newListGH.addAll(generatePointsBetweenTwoPointsAtoB(pointG, pointH, 50))
-//
-//
-//        newListBC.addAll(generatePointsBetweenTwoPointsBtoA(pointB, pointC, 50))
-//        newListCD.addAll(generatePointsBetweenTwoPointsBtoA(pointC, pointD, 50))
-//        newListDE.addAll(generatePointsBetweenTwoPointsBtoA(pointD, pointE, 50))
-//        newListEF.addAll(generatePointsBetweenTwoPointsBtoA(pointE, pointF, 50))
-//        newListFG.addAll(generatePointsBetweenTwoPointsBtoA(pointF, pointG, 50))
-//        newListHA.addAll(generatePointsBetweenTwoPointsBtoA(pointH, pointA, 50))
+        newListAB.addAll(generatePointsBetweenTwoPointsAtoB(pointA, pointB, 30))
+        newListGH.addAll(generatePointsBetweenTwoPointsAtoB(pointG, pointH, 30))
+        newListBC.addAll(generatePointsBetweenTwoPointsBtoA(pointB, pointC, 30))
+        newListCD.addAll(generatePointsBetweenTwoPointsBtoA(pointC, pointD, 30))
+        newListDE.addAll(generatePointsBetweenTwoPointsBtoA(pointD, pointE, 30))
+        newListEF.addAll(generatePointsBetweenTwoPointsBtoA(pointE, pointF, 30))
+        newListFG.addAll(generatePointsBetweenTwoPointsBtoA(pointF, pointG, 30))
+        newListHA.addAll(generatePointsBetweenTwoPointsBtoA(pointH, pointA, 30))
 
 
 
         listMotiontOct.addAll(newListAB)
-//        listMotiontOct.addAll(newListBC)
-//        listMotiontOct.addAll(newListCD)
-//        listMotiontOct.addAll(newListDE)
-//        listMotiontOct.addAll(newListEF)
-//        listMotiontOct.addAll(newListFG)
-//        listMotiontOct.addAll(newListGH)
-//        listMotiontOct.addAll(newListHA)
+        listMotiontOct.addAll(newListBC)
+        listMotiontOct.addAll(newListCD)
+        listMotiontOct.addAll(newListDE)
+        listMotiontOct.addAll(newListEF)
+        listMotiontOct.addAll(newListFG)
+        listMotiontOct.addAll(newListGH)
+        listMotiontOct.addAll(newListHA)
         return listMotiontOct
     }
 
@@ -773,19 +778,15 @@ class KView @JvmOverloads constructor(
         jobDraw?.cancel()
 
         jobDraw = GlobalScope.launch(Dispatchers.Main) {
-            delay(100)
             val job1 = launch(Dispatchers.Main) {
-
-                calculateOctagonPoints(width, height).forEach {
-                    Log.d(TAG, "drawPoints: x  ${it.x}, y ${it.y}")
+              while(true) {
+//                    Log.d(TAG, "drawPoints: x  ${it.x}, y ${it.y}")
 
 //                    Log.d(TAG, "drawPoints: x  ${x}, y ${y}")
                     if (!isPaused) {
                         Log.d(TAG, " draw action p1: ")
-                        if (x >= 400){
-                            x =0
-                        }
-                        x =x+5
+                        x += 10
+                        y += 10
                         val a = Math.abs(sX1 +x ) % mX
                         val b = Math.abs(sY1 + y) % mY
                         mCurX =
@@ -800,31 +801,12 @@ class KView @JvmOverloads constructor(
                         }
 
                     }
-                    delay(1)
+                    delay(15)
                     invalidate()
                 }
             }
             job1.join()
-//            if (isLoop) {
-//
-//                calculateOctagonPoints(width, height).forEach {
-//                    if (isPaused) {
-//                        Log.d(TAG, "action p1: ")
-//                        val a = Math.abs(sX1 + it.x) % mX
-//                        val b = Math.abs(sY1 + it.y) % mY
-//                        mCurX =
-//                            (a / mScale).toInt() // *(int)(event.getHistoricalX(0)-event.getHistoricalX(1));
-//                        mCurY =
-//                            (b / mScale).toInt() // *(int)(event.getHistoricalY(0)-event.getHistoricalY(1));
-//                        delay(10)
-//                        drawIntoBitmap()
-//                        invalidate()
-//                        if (use3D) {
-//                            updateTexture()
-//                        }
-//                    }
-//                }
-//            }
+
         }
 
     }
