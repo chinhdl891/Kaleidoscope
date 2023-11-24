@@ -15,7 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 
-class K3DRenderer implements GLSurfaceView.Renderer, SensorEventListener {
+public class K3DRenderer implements GLSurfaceView.Renderer, SensorEventListener {
 	// private Square mSquare;
 	private Sphere mSphere;
 	// private Square mSquare;

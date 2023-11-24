@@ -19,7 +19,8 @@
             android:name=".Kaleidoscope"
             android:label="@string/app_name"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
